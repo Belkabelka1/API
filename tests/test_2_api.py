@@ -52,3 +52,21 @@ def test_create():
     assert res.json()["name"] == name
     assert res.json()["job"] == job
     assert api.delete_user(res.json()["id"]).status_code == HTTPStatus.NO_CONTENT
+
+
+def test_registration():
+    email = "eve.holt@reqres.in"
+    password = "123"
+    res = api.registration(email, password)
+    res_body = res.json()
+    assert res.status_code == HTTPStatus.OK
+    Assert.validate_schema(res_body)
+
+
+def test_incorrect_registration():
+    email = "eve.holt@reqres.in"
+    res = api.incorrect_registration(email)
+    res_body = res.json()
+    assert res.status_code == HTTPStatus.BAD_REQUEST
+    Assert.validate_schema(res_body)
+    assert res_body["error"] == "Missing password"
